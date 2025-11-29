@@ -4,5 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import tech.csm.model.ProjectAssignment;
 
-public interface ProjectAssignmentRepository extends JpaRepository<ProjectAssignment, Integer> { }
+public interface ProjectAssignmentRepository extends JpaRepository<ProjectAssignment, Integer> {
+	
+}
 

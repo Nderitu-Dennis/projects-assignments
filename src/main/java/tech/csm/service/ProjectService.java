@@ -11,9 +11,9 @@ import java.util.List;
 public class ProjectService {
 
     @Autowired
-    private ProjectRepository repo;
+    private ProjectRepository projectRepository;
 
     public List<Project> getBillableProjectsByTeam(Integer teamId) {
-        return repo.findByTeam_TeamIdAndStatusAndIsBillable(teamId, "Active", true);
+        return projectRepository.findByTeam_TeamIdAndStatusAndIsBillable(teamId, "Active", true);
     }
 }

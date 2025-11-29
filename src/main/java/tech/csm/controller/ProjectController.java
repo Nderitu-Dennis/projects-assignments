@@ -48,14 +48,14 @@ public class ProjectController {
     }
 
     // 2. Get Teams by Department
-    @GetMapping("/teams-by-department")
+    @GetMapping("/teams-by-department-id")
     @ResponseBody
     public List<Team> getTeamsByDepartment(@RequestParam("departmentId") Integer departmentId) {
         return teamService.getTeamsByDepartment(departmentId);
     }
 
-    // 3. Get Projects by Team only active & billable
-    @GetMapping("/projects-by-team")
+    // 3. Get Projects by Team only active & bill_able
+    @GetMapping("/projects-by-team-id")
     @ResponseBody
     public List<Project> getProjectsByTeam(@RequestParam("teamId") Integer teamId) {
         return projectService.getBillableProjectsByTeam(teamId);

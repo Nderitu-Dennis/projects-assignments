@@ -11,17 +11,17 @@ import java.util.List;
 public class ProjectAssignmentService {
 
     @Autowired
-    private ProjectAssignmentRepository repo;
+    private ProjectAssignmentRepository projectAssignmentRepository;
 
     public ProjectAssignment saveAssignment(ProjectAssignment assignment) {
-        return repo.save(assignment);
+        return projectAssignmentRepository.save(assignment);
     }
 
     public List<ProjectAssignment> getAllAssignments() {
-        return repo.findAll();
+        return projectAssignmentRepository.findAll();
     }
 
     public void deleteAssignment(Integer id) {
-        repo.deleteById(id);
+        projectAssignmentRepository.deleteById(id);
     }
 }

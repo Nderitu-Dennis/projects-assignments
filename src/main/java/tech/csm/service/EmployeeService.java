@@ -11,9 +11,9 @@ import java.util.List;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeRepository repo;
+    private EmployeeRepository employeeRepository;
 
     public List<Employee> getActiveEmployees() {
-        return repo.findByIsActiveTrue();
+        return employeeRepository.findByIsActiveTrue();
     }
 }

@@ -29,7 +29,7 @@
 						<div class="col-4 mb-3">
 							<label for="departmentId" class="font-weight-bold">Department</label>
 							<select id="departmentId" name="departmentId" class='form-control'>
-								<option value='0'>-select-</option>
+								<option value='0'>-select department-</option>
 								<c:forEach items="${departments}" var="d">
 									<option value="${d.departmentId}">${d.departmentName}</option>
 								</c:forEach>
@@ -40,41 +40,30 @@
 						<!-- Team Dropdown -->
 						<div class="col-4 mb-3">
 							<label for="teamId" class="font-weight-bold">Team</label>
-							<select id="teamId" name="teamId" class='form-control' disabled>
+							<select id="teamId" name="teamId" class='form-control'>
 								<option value='0'>-select-</option>
 							</select>
 							<div class="invalid-feedback">Please select a team</div>
 						</div>
 
-						<!-- Project Dropdown 
-						<div class="col-4 mb-3">
-							<label for="projectId" class="font-weight-bold">Project</label>
-							<select id="projectId" name="projectId" class='form-control' disabled>
-								<option value='0' disabled>-select-</option>
-							</select>
-							<input type="hidden" id="projectIdHidden" name="projectId" value="project.projectId">
-							<div class="invalid-feedback" id="projectFeedback">Please select a project</div>
-						</div> -->
 						
-						<!-- Project Dropdown -->
 						<div class="col-4 mb-3">
 							<label for="projectId" class="font-weight-bold">Project</label>
-							<select id="projectId" name="projectId" class='form-control'>
+							<select id="projectId" name="project.projectId" class='form-control'>
 								<option value='0'>-select-</option>
 							</select>
-							<div class="invalid-feedback">Please select a project</div>
+							<div class="invalid-feedback" id="projectFeedback">Please select a project</div>
 						</div>
-
+						
 						<!-- Employee Dropdown -->
 						<div class="col-6 mb-3">
 							<label for="employeeId" class="font-weight-bold">Employee</label>
-							<select id="employeeId" name="employeeId" class='form-control'>
-								<option value='0'>-select-</option>
+							<select id="employeeId" name="employee.employeeId" class='form-control'>
+								<option value='0'>-select employee-</option>
 								<c:forEach items="${employees}" var="e">
 									<option value="${e.employeeId}">${e.fullName}</option>
 								</c:forEach>
 							</select>
-							<input type="hidden" id="employeeIdHidden" name="employee.employeeId">
 						</div>
 
 						<!-- Role on Project -->
@@ -121,84 +110,73 @@
 		</div>
 	</div>
 
-<script src="https://code.jquery.com/jquery-2.2.4.js"
-        integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 <script>
-$(document).ready(function() {
-    // When Department changes, fetch Teams
-    $("#departmentId").change(function() {
-        var deptId = $(this).val();
-        $("#teamId").prop('disabled', true).html("<option value='0'>-select-</option>");
-        $("#projectId").prop('disabled', true).html("<option value='0'>-select-</option>");
-        if(deptId > 0) {
-            $.ajax({
-                url: "teams-by-department",  // Controller endpoint
-                type: "GET",
-                data: { departmentId: deptId },
-                success: function(response) {
-                    if(response.length > 0) {
-                        $.each(response, function(i, team) {
-                            $("#teamId").append("<option value='"+team.teamId+"' data-status='"+team.status+"'>"+team.teamName+"</option>");
-                        });
-                        $("#teamId").prop('disabled', false);
-                    }
-                }
-            });
-        }
-    });
+		 document.addEventListener("DOMContentLoaded", function(event){
+			var al=document.querySelector("#alertId");
+			if(al != null){
+				setTimeout(() => {
+					al.remove();
+				}, 3000);
+			}			
+		});
+	</script>
 
-    // When Department changes, fetch Teams
-    $("#teamId").change(function() {
-        var teamId = $(this).val();
-        $("#projectId").prop('disabled', false).html("<option value='0'>-select-</option>");
-        $("#employeeId").prop('disabled', true).html("<option value='0'>-select-</option>");
-        if(teamId > 0) {
-            $.ajax({
-                url: "projects-by-team",  // Controller endpoint
-                type: "GET",
-                data: { teamId: teamId },
-                success: function(response) {
-                    if(response.length > 0) {
-                        $.each(response, function(i, project) {
-                        	console.log(project);
-                            $("#projectId").append("<option value='"+project.projectId+"' data-status='"+project.status+"'>"+project.projectName+"</option>");
-                        });
-                        $("#projectId").prop('disabled', false);
-                    }
-                }
-            });
-        }
-    });
+<script type="text/javascript">
 
- // When Project changes, fetch Employees of selected Team
-    $("#projectId").change(function() {
-        var teamId = $("#teamId").val();  // FIX: correctly getting teamId
+	$("#departmentId").change(function(e){
+		
+		$.ajax({
+			  url: "http://localhost:8089/prjct/teams-by-department-id", //backend endpoint
+			  type: "GET",  //GET req-params appended to the url & fetched by #RequestParam
+			  data: {
+				  departmentId : $(this).val()		     
+			  },
+			  success: function(response) { //returns JSON response
+				  console.log(response)
+				  
+			      var teamId=$("#teamId");  //selects the teams 
+			      $(teamId).find("option").remove(); //clears all existing options
+			      $(teamId).append("<option value='0'>-select-</option>") //adds the default select option
+				  $(response).each(function(i,e){
+					  //loops thru each object in the JSON res, i is index & e is teams object here
+			    	  $(teamId).append("<option value="+e.teamId+">"+e.teamName+"</option>");
+			      });
+			  },
+			  error: function(xhr, status, error) {
+			      console.error("Error submitting data: ", error);
+			  }
+			});
+	});
 
-        $("#employeeId").prop('disabled', false)
-                        .html("<option value='0'>-select-</option>");
-        
-    });
+	
+$("#teamId").change(function(e){
+		
+		$.ajax({
+			  url: "http://localhost:8089/prjct/projects-by-team-id",
+			  type: "GET",
+			  data: {
+			      teamId: $(this).val()		     
+			  },
+			  success: function(response) {
+				  console.log(response)
+				  
+			      var projectId=$("#projectId");
+			      $(projectId).find("option").remove();
+			      $(projectId).append("<option value='0'>-select-</option>")
+				  $(response).each(function(i,e){
+			    	  $(projectId).append("<option value="+e.projectId+">"+e.projectName+"</option>");
+			      });
+			  },
+			  error: function(xhr, status, error) {
+			      console.error("Error submitting data: ", error);
+			  }
+			});
+	});
 
- 
-    
-    // Update hidden fields when dropdowns change
-    $("#projectId").change(function() {
-        $("#projectIdHidden").val($(this).val());
-    });
 
-    $("#employeeId").change(function() {
-        $("#employeeIdHidden").val($(this).val());
-    });
-
-    // FIX: Sync hidden fields before form submission
-    $("#assignmentForm").submit(function() {
-        $("#projectIdHidden").val($("#projectId").val());
-        $("#employeeIdHidden").val($("#employeeId").val());
-        return true;
-    });
-});
 </script>
+
 
 </body>
 </html>
