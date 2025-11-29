@@ -1,5 +1,6 @@
 package tech.csm.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,13 @@ public class ProjectController {
     private EmployeeService employeeService;
 
     @Autowired
-    private ProjectAssignmentService assignmentService;
+    private ProjectAssignmentService projectAssignmentService;
 
     // Project Assignment form
     @GetMapping("/project-assignment-form")
     public String getProjectAssignmentForm(Model model) {
         model.addAttribute("departments", departmentService.getActiveDepartments());
         model.addAttribute("employees", employeeService.getActiveEmployees());
-        model.addAttribute("assignments", assignmentService.getAllAssignments());
         model.addAttribute("assignment", new ProjectAssignment());
         return "project-assignment-form";
     }
@@ -64,16 +64,28 @@ public class ProjectController {
     // 4. Save Project Assignment
     @PostMapping("/save-assignment")
     public String saveProjectAssignment(@ModelAttribute ProjectAssignment assignment, RedirectAttributes rd) {
-        ProjectAssignment saved = assignmentService.saveAssignment(assignment);
+        ProjectAssignment saved = projectAssignmentService.saveAssignment(assignment);
         String msg = "Project Assignment saved with id : " + saved.getAssignmentId();
         rd.addFlashAttribute("msg", msg);
         return "redirect:./project-assignment-form";
     }
+    
+    //get all assigned projects
+    @GetMapping("/get-assigned-projects-list")
+    public String getProjectsAssigned(Model model) {
+        List<ProjectAssignment> assignments = projectAssignmentService.getAllAssignedProjects();
+        if (assignments == null) {
+            assignments = Collections.emptyList();
+        }
+        model.addAttribute("projectsAssigned", assignments);  //variable names shld not contain dashes
+        return "assigned-projects-list";
+    }
+
 
     // 5. Delete Project Assignment
     @GetMapping("/delete-project-assignment")
     public String deleteProjectAssignment(@RequestParam("id") Integer assignmentId, RedirectAttributes rd) {
-        assignmentService.deleteAssignment(assignmentId);
+        projectAssignmentService.deleteAssignment(assignmentId);
         rd.addFlashAttribute("msg", "Project Assignment deleted successfully!");
         return "redirect:./get-project-assignment-form";
     }

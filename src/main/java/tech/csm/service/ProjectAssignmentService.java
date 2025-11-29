@@ -17,7 +17,7 @@ public class ProjectAssignmentService {
         return projectAssignmentRepository.save(assignment);
     }
 
-    public List<ProjectAssignment> getAllAssignments() {
+    public List<ProjectAssignment> getAllAssignedProjects() {
         return projectAssignmentRepository.findAll();
     }
 

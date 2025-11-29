@@ -109,6 +109,10 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="h2 text-info m-5">
+	View assigned projects <a href="get-assigned-projects-list">here</a>
+	</div>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 <script>
