@@ -89,4 +89,16 @@ public class ProjectController {
         rd.addFlashAttribute("msg", "Project deleted successfully!");
         return "redirect:./get-assigned-projects-list";
     }
+    
+    //updating a project assignment
+    @GetMapping("/update-assignment")
+    public String editAssignment(@RequestParam("assignmentId") Integer assignmentId, Model model) {
+        ProjectAssignment assignment = projectAssignmentService.getAssignmentById(assignmentId);
+
+        model.addAttribute("assignment", assignment); // pre-fill the form
+        model.addAttribute("departments", departmentService.getActiveDepartments());
+        model.addAttribute("employees", employeeService.getActiveEmployees());
+        return "project-assignment-form"; 
+    }
+
 }

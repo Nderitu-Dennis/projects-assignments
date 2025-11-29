@@ -55,7 +55,7 @@
                     <td>${a.status}</td>
                     <td>
 												<a href="./delete-assignment?assignmentId=${a.assignmentId}" class="text-danger">Delete</a>  
-												<a href="./update?projectId=${a.project.projectId}" class="text-primary">Update</a>
+												<a href="./update-assignment?assignmentId=${a.assignmentId}" class="text-primary">Update</a>
 										</td>
                 </tr>
             </c:forEach>
@@ -63,6 +63,9 @@
     </table>
 
 </div>
+
+    <div class="h3 text-warn m-5"> Click <a href="./project-assignment-form"> here </a> to add a new project assignment</div>
+
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"
         integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="

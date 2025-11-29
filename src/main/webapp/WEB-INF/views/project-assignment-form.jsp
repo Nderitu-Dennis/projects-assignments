@@ -20,10 +20,15 @@
 			</div>			
 		</c:if>
 		
+		<!-- FORM -->
+		
 		<div class="card">
 			<div class="card-header h2 text-primary bg-secondary">Project Assignment Form</div>
 			<div class="card-body">
-				<form id="assignmentForm" action="./save-assignment" method="post" novalidate>
+				<form id="assignmentForm" action="./save-assignment" method="post" novalidate> 
+				<!-- novalidate is used when server side or JS validation is implemented -->
+				    <input type="hidden" name="assignmentId" value="${assignment.assignmentId}"> <!-- for update -->
+				
 					<div class="row">						
 						<!-- Department Dropdown -->
 						<div class="col-4 mb-3">
@@ -69,34 +74,36 @@
 						<!-- Role on Project -->
 						<div class="col-6 mb-3">
 							<label for="roleOnProject" class="font-weight-bold">Role on Project</label>
-							<input type="text" name="roleOnProject" id="roleOnProject" class="form-control">
+							<input type="text" name="roleOnProject" id="roleOnProject" class="form-control" 
+							value="${assignment.roleOnProject}">
 						</div>
 
 						<!-- Allocation % -->
 						<div class="col-3 mb-3">
 							<label for="allocationPercent" class="font-weight-bold">Allocation %</label>
 							<input type="number" name="allocationPercent" id="allocationPercent" class="form-control"
-							       step="0.01" min="1" max="100">
+							       step="1" min="1" max="100"  value="${assignment.allocationPercent}">
 						</div>
 
 						<!-- Start Date -->
 						<div class="col-3 mb-3">
 							<label for="startDate" class="font-weight-bold">Start Date</label>
-							<input type="date" name="startDate" id="startDate" class="form-control">
+							<input type="date" name="startDate" id="startDate" class="form-control"
+							 value="${assignment.startDate}">
 						</div>
 
 						<!-- End Date -->
 						<div class="col-3 mb-3">
 							<label for="endDate" class="font-weight-bold">End Date</label>
-							<input type="date" name="endDate" id="endDate" class="form-control">
+							<input type="date" name="endDate" id="endDate" class="form-control" value="${assignment.endDate}">
 						</div>
 
 						<!-- Status -->
 						<div class="col-3 mb-3">
 							<label for="status" class="font-weight-bold">Status</label>
 							<select name="status" id="status" class='form-control'>
-								<option value="Active">Active</option>
-								<option value="Inactive">Inactive</option>
+								 <option value="Active" ${assignment.status eq 'Active' ? 'selected' : ''}>Active</option>
+    						<option value="Inactive" ${assignment.status eq 'Inactive' ? 'selected' : ''}>Inactive</option>
 							</select>
 						</div>
 					</div>
@@ -110,7 +117,7 @@
 		</div>
 	</div>
 	
-	<div class="h2 text-info m-5">
+	<div class="h2 text-warn m-5">
 	View assigned projects <a href="get-assigned-projects-list">here</a>
 	</div>
 

@@ -14,8 +14,13 @@ public class ProjectAssignmentService {
     private ProjectAssignmentRepository projectAssignmentRepository;
 
     public ProjectAssignment saveAssignment(ProjectAssignment assignment) {
+        if (assignment.getAssignmentId() != null) { // existing assignment
+            ProjectAssignment existing = projectAssignmentRepository.findById(assignment.getAssignmentId()).orElseThrow();
+            assignment.setCreatedAt(existing.getCreatedAt()); // preserve createdAt
+        }
         return projectAssignmentRepository.save(assignment);
     }
+
 
     public List<ProjectAssignment> getAllAssignedProjects() {
         return projectAssignmentRepository.findAll();
@@ -24,4 +29,8 @@ public class ProjectAssignmentService {
     public void deleteAssignment(Integer assignmentId) {
         projectAssignmentRepository.deleteById(assignmentId);
     }
+
+	public ProjectAssignment getAssignmentById(Integer assignmentId) {
+		return projectAssignmentRepository.findById(assignmentId).get();
+	}
 }
